@@ -720,12 +720,13 @@ var env = system.env;
 			response.close();
 		}
 
-		server.listen(host ? host + ':' + port : parseInt(port, 10),
+		var result = server.listen(host ? host + ':' + port : parseInt(port, 10),
 			function (request, response) {
 				var jsonStr = request.postRaw || request.post,
 					params;
 				try {
 					params = JSON.parse(jsonStr);
+
 					if (params.status) {
 						// for server health validation
 						response.statusCode = 200;
@@ -743,10 +744,15 @@ var env = system.env;
 				}
 			}); // end server.listen
 
-		// switch to serverMode
-		serverMode = true;
+		if (result) {
+			// switch to serverMode
+			serverMode = true;
 
-		console.log('OK, PhantomJS is ready.');
+			console.log('OK, PhantomJS is ready.');
+		} else {
+			console.log('Server cannot start.');
+		}
+		
 	};
 
 	args = mapCLArguments();
@@ -766,11 +772,14 @@ var env = system.env;
 		}
 	}
 
-	console.log('HOST', env.HOST);
-	console.log('PORT', env.PORT);
+	var HOST = env.HOST || '127.0.0.1';
+	var PORT = env.PORT || '6000';
 
-	if (!!env.PORT && !!env.HOST ) {
-		startServer(env.HOST, env.PORT);
+	console.log('HOST', HOST);
+	console.log('PORT', PORT);
+
+	if (PORT && HOST ) {
+		startServer(HOST, PORT);
 	} else {
 		// presume commandline usage
 		render(args, function (msg) {
