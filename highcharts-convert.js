@@ -722,8 +722,11 @@ var env = system.env;
 
 		var result = server.listen(host ? host + ':' + port : parseInt(port, 10),
 			function (request, response) {
+
+
 				var jsonStr = request.postRaw || request.post,
 					params;
+
 				try {
 					params = JSON.parse(jsonStr);
 
@@ -771,14 +774,13 @@ var env = system.env;
 			}
 		}
 	}
-
-	var HOST = env.HOST || '127.0.0.1';
+	var HOST = env.HOST;
 	var PORT = env.PORT || '6000';
 
 	console.log('HOST', HOST);
 	console.log('PORT', PORT);
 
-	if (PORT && HOST ) {
+	if (PORT) {
 		startServer(HOST, PORT);
 	} else {
 		// presume commandline usage
