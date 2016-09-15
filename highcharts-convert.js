@@ -736,6 +736,10 @@ var env = system.env;
 						response.write('OK');
 						response.close();
 					} else {
+						if (params.callback) {
+							params.callback = eval(decodeURIComponent(params.callback));
+						}
+
 						render(params, function (result) {
 							response.statusCode = 200;
 							response.write(result);
